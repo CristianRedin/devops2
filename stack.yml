@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   appredin:
-    image: cristianimg:latest
+    image: localhost:5001/cristianimg:latest
     deploy:
       replicas: 1
       labels:
@@ -20,7 +18,3 @@ services:
         traefik.docker.network: "traefik-public"
     networks:
       - traefik-public
-
-networks:
-  traefik-public:
-    external: true
