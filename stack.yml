@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  pgmoreno:
+    image: pgmoreno:latest
+    build: .
+    deploy:
+      replicas: 1
+      labels:
