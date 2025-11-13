@@ -16,7 +16,7 @@ services:
         traefik.http.routers.appredin-secure.tls: "true"
         traefik.http.routers.appredin-secure.tls.certresolver: "http"
         traefik.http.routers.appredin-secure.service: "appredin"
-        traefik.http.services.appredin.loadbalancer.server.port: "80"  # Asegúrate que tu app escucha en el puerto 80 dentro del contenedor
+        traefik.http.services.appredin.loadbalancer.server.port: "80"  # Asegúrate de que tu app escucha en el puerto 80 dentro del contenedor
         traefik.docker.network: "traefik-public"
     networks:
       - traefik-public

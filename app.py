@@ -63,5 +63,4 @@ def home():
     """
 
 if __name__ == "__main__":
-    # Ejecuta en el puerto 80
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=80)  # Asegúrate de que Flask esté escuchando en el puerto 80
