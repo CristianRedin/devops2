@@ -1,28 +1,39 @@
 version: "3.8"
 
 services:
+  # Nombre del servicio en Swarm. El nombre completo será 'quinto_appredin'
   appredin:
     image: cristianimg:latest
     deploy:
       replicas: 1
       labels:
+        # Habilitar Traefik para este servicio
         traefik.enable: "true"
+        
+        # 1. Router HTTP (Redirección a HTTPS)
         traefik.http.routers.appredin.entrypoints: "http"
         traefik.http.routers.appredin.rule: "Host(`appredin.byronrm.com`)"
         traefik.http.middlewares.appredin-https-redirect.redirectscheme.scheme: "https"
         traefik.http.routers.appredin.middlewares: "appredin-https-redirect"
+        
+        # 2. Router HTTPS (Servicio seguro)
         traefik.http.routers.appredin-secure.entrypoints: "https"
         traefik.http.routers.appredin-secure.rule: "Host(`appredin.byronrm.com`)"
         traefik.http.routers.appredin-secure.tls: "true"
         traefik.http.routers.appredin-secure.tls.certresolver: "http"
         traefik.http.routers.appredin-secure.service: "appredin"
-        traefik.http.services.appredin.loadbalancer.server.port: "80"  # Asegúrate de que tu app escucha en el puerto 80 dentro del contenedor
+        
+        # 3. Servicio y puerto interno
+        traefik.http.services.appredin.loadbalancer.server.port: "80"
         traefik.docker.network: "traefik-public"
     networks:
       - traefik-public
-    ports:
-      - "80:80"  # Expón el puerto 80 para la comunicación externa
-
+    
+    # --- ¡SECCIÓN ELIMINADA! ---
+    # La sección 'ports' se ha eliminado porque Traefik ya maneja la exposición
+    # del puerto 80 del host. Si se deja, causa un conflicto con Traefik.
+    # ---
+    
 networks:
   traefik-public:
-    external: true  # Asegúrate de que esta red externa esté creada en tu servidor
+    external: true
