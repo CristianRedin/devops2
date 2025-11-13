@@ -1,13 +1,13 @@
 # Etapa 1: Instalar dependencias
 FROM python:3.9-slim as builder
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo
 WORKDIR /app
 
 # Copiar el archivo de dependencias
 COPY requirements.txt /app/
 
-# Instalar las dependencias necesarias
+# Instalar las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
 # ---
@@ -15,19 +15,19 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Etapa 2: Construcción final
 FROM python:3.9-slim
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia de dependencias: solo copiamos el directorio site-packages.
-# Gunicorn se ejecutará como un módulo de Python (python -m gunicorn).
-COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+# COPIA CORREGIDA: Copiar el directorio de trabajo completo /app de la etapa builder.
+# Esto garantiza que todas las dependencias y el código estén presentes.
+COPY --from=builder /app /app/
 
-# Copiar el resto del código de la aplicación (app.py, etc.)
+# Copiar el resto del código de la aplicación (solo se copiará si hay archivos nuevos)
+# Este paso asegura que el código fuente de tu máquina esté presente.
 COPY . /app/
 
-# Exponer el puerto 80 para que gunicorn pueda escuchar
+# Exponer el puerto 80
 EXPOSE 80
 
-# Comando por defecto para ejecutar la aplicación usando gunicorn
-# Usa 'python -m' para asegurar que Gunicorn se ejecute correctamente.
+# Comando para ejecutar la aplicación: Mantiene el uso de 'python -m gunicorn' (CORRECTO).
 CMD ["python", "-m", "gunicorn", "app:app", "--bind", "0.0.0.0:80", "--workers", "3"]
