@@ -62,5 +62,6 @@ def home():
     </html>
     """
 
+# No incluir app.run() para producción
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)  # Asegúrate de que Flask esté escuchando en el puerto 80
+    app.run(debug=True)  # Solo si ejecutas en desarrollo. Gunicorn manejará la ejecución en producción

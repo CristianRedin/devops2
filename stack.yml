@@ -20,6 +20,8 @@ services:
         traefik.docker.network: "traefik-public"
     networks:
       - traefik-public
+    ports:
+      - "80:80"  # Expón el puerto 80 para la comunicación externa
 
 networks:
   traefik-public:
